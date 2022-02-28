@@ -30,7 +30,7 @@ public class WeaponController : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         // Calculate the beginning and end of the line renderer, the end gets also used to determine if we hit an Enemy
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);

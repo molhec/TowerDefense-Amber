@@ -84,7 +84,7 @@ public class EnemySpawner : MonoBehaviour
         SpawnEnemies();
     }
 
-    IEnumerator SpawnEnemiesCoroutine()
+    private IEnumerator SpawnEnemiesCoroutine()
     {
         while (remainEnemiesToInstantiate > 0)
         {

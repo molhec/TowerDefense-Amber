@@ -36,20 +36,25 @@ public class EnemyController : MonoBehaviour
         EventsController.current.OnDamageReceived -= ReceiveDamage;
         EventsController.current.OnEnemyArrivedToTower -= DeactivateColliders;
     }
-
+    
+    /// <summary>
+    /// Starts a coroutine to assing a position to go and updates the animation
+    /// </summary>
+    /// <param name="posToGo">Position where the enemy will go</param>
     public void StartNavMeshPath(Vector3 posToGo)
     {
         // Coroutine to make the Enemy to follow a path
         StartCoroutine(FollowingCoroutine(posToGo));
     }
 
-    private void DeactivateColliders()
+    private void DeactivateColliders(Collider enemyCollider)
     {
-        //headCollider.gameObject.SetActive(false);
-        //bodyCollider.gameObject.SetActive(false);
+        if (enemyCollider != headCollider && enemyCollider != bodyCollider) return;
+        headCollider.gameObject.SetActive(false);
+        bodyCollider.gameObject.SetActive(false);
     }
 
-    IEnumerator FollowingCoroutine(Vector3 posToGo)
+    private IEnumerator FollowingCoroutine(Vector3 posToGo)
     {
         navMeshAgentAgent.SetDestination(posToGo);
         navMeshAgentAgent.speed = enemyData.currentSpeed;

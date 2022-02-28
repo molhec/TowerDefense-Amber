@@ -12,7 +12,7 @@ public class TowerController : MonoBehaviour
 
     [SerializeField] private int towerHealth = 3;
 
-    public int currentTowerHealth;
+    private int currentTowerHealth;
     private bool isDestroyed = false;
 
     private void Start()
@@ -36,9 +36,12 @@ public class TowerController : MonoBehaviour
     {
         // Check if Enemy Collides with Tower and inflict Tower Damage
         if (other.CompareTag("Enemy") && !isDestroyed)
-            ReceiveDamage();
+            ReceiveDamage(other);
     }
-
+    
+    /// <summary>
+    /// Enables the pistol weapon and disable the other ones, invoked from Button UI Unity Event
+    /// </summary>
     public void ChangeWeaponToPistol()
     {
         pistol.gameObject.SetActive(true);
@@ -46,6 +49,9 @@ public class TowerController : MonoBehaviour
         shotgun.gameObject.SetActive(false);
     }
     
+    /// <summary>
+    /// Enables the rifle weapon and disable the other ones, invoked from Button UI Unity Event
+    /// </summary>
     public void ChangeWeaponToRifle()
     {
         pistol.gameObject.SetActive(false);
@@ -53,6 +59,9 @@ public class TowerController : MonoBehaviour
         shotgun.gameObject.SetActive(false);
     }
     
+    /// <summary>
+    /// Enables the shotgun weapon and disable the other ones, invoked from Button UI Unity Event
+    /// </summary>
     public void ChangeWeaponToShotgun()
     {
         pistol.gameObject.SetActive(false);
@@ -60,7 +69,7 @@ public class TowerController : MonoBehaviour
         shotgun.gameObject.SetActive(true);
     }
 
-    private void ReceiveDamage()
+    private void ReceiveDamage(Collider enemyCollider)
     {
         currentTowerHealth--;
 
@@ -70,7 +79,7 @@ public class TowerController : MonoBehaviour
             EventsController.current.LoseGame();
         }
         
-        EventsController.current.EnemyArriveToTower();
+        EventsController.current.EnemyArriveToTower(enemyCollider);
     }
 
     private void ResetTower()
