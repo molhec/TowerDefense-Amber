@@ -24,18 +24,29 @@ public class EnemyController : MonoBehaviour
 
     private void Start()
     {
+        // Subscribe to EventController Events
         EventsController.current.OnDamageReceived += ReceiveDamage;
+        EventsController.current.OnEnemyArrivedToTower += DeactivateColliders;
         maxHealth = enemyData.currentHealth;
     }
 
     private void OnDestroy()
     {
+        // Unsubscribe to EventController Events
         EventsController.current.OnDamageReceived -= ReceiveDamage;
+        EventsController.current.OnEnemyArrivedToTower -= DeactivateColliders;
     }
 
     public void StartNavMeshPath(Vector3 posToGo)
     {
+        // Coroutine to make the Enemy to follow a path
         StartCoroutine(FollowingCoroutine(posToGo));
+    }
+
+    private void DeactivateColliders()
+    {
+        //headCollider.gameObject.SetActive(false);
+        //bodyCollider.gameObject.SetActive(false);
     }
 
     IEnumerator FollowingCoroutine(Vector3 posToGo)
@@ -51,11 +62,12 @@ public class EnemyController : MonoBehaviour
         }
         
         anim.SetBool(IsWalking, false);
-        EventsController.current.EnemyArrivedToTower();
     }
 
     private void ReceiveDamage(Collider colliderToCheck, Bullet bullet)
     {
+        // Calculate damage based on where the bullet hits the enemy
+        
         if(isDead) return;
         
         if (colliderToCheck == headCollider) 
@@ -67,8 +79,11 @@ public class EnemyController : MonoBehaviour
             enemyData.currentHealth -= bullet.bodyDamage;
         }
         
+        // Update healthBar
         float healthBarValue = enemyData.currentHealth / maxHealth;
         enemyView.UpdateHealthBar(healthBarValue);
+        
+        // Check if the enemy gets killed
         
         if (enemyData.currentHealth <= 0)
         {

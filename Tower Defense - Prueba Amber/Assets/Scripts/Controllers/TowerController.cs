@@ -12,25 +12,32 @@ public class TowerController : MonoBehaviour
 
     [SerializeField] private int towerHealth = 3;
 
-    private int currentTowerHealth;
+    public int currentTowerHealth;
     private bool isDestroyed = false;
 
     private void Start()
     {
-        EventsController.current.OnEnemyArrivedToTower += ReceiveDamage;
+        // Subscribe to EventController Events
         EventsController.current.OnResetGame += ResetTower;
+        
+        // Initialize to default values
 
         currentTowerHealth = towerHealth;
         
-        ChangeWeaponToPistol();
+        ChangeWeaponToRifle();
     }
 
     private void OnDestroy()
     {
-        EventsController.current.OnEnemyArrivedToTower -= ReceiveDamage;
         EventsController.current.OnResetGame -= ResetTower;
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        // Check if Enemy Collides with Tower and inflict Tower Damage
+        if (other.CompareTag("Enemy") && !isDestroyed)
+            ReceiveDamage();
+    }
 
     public void ChangeWeaponToPistol()
     {
@@ -62,6 +69,8 @@ public class TowerController : MonoBehaviour
             isDestroyed = true;
             EventsController.current.LoseGame();
         }
+        
+        EventsController.current.EnemyArriveToTower();
     }
 
     private void ResetTower()

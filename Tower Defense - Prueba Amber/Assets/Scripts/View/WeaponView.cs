@@ -11,12 +11,14 @@ public class WeaponView : MonoBehaviour
 
     private void Start()
     {
+        // Subscribe to EventController Events
         lineRenderer.gameObject.SetActive(true);
         EventsController.current.OnDrawWeaponTrajectory += DrawTrajectory;
     }
 
     private void OnDestroy()
     {
+        // Unsubscribe to EventController Events
         lineRenderer.gameObject.SetActive(false);
         EventsController.current.OnDrawWeaponTrajectory -= DrawTrajectory;
     }

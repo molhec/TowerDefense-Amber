@@ -14,6 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Rifle
   bulletToUse: {fileID: 11400000, guid: 5cde24a307d6549f9866e4157d101214, type: 2}
-  maxBullets: 35
-  fireRate: 6
-  recoveryTime: 0
+  fireRate: 5
+  maxDistanceToRegisterDamage: 15

@@ -7,7 +7,6 @@ public class Weapon : ScriptableObject
 {
     public string name;
     public Bullet bulletToUse;
-    public int maxBullets;
     public float fireRate;
-    public float recoveryTime;
+    public float maxDistanceToRegisterDamage;
 }

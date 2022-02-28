@@ -13,13 +13,17 @@ public class GameView : MonoBehaviour
 
     private void Start()
     {
+        // Subscribe to EventController Events
         EventsController.current.OnUpdateRemainingZombies += UpdateRemainingZombiesText;
         EventsController.current.OnWinGame += ShowWinScreen;
         EventsController.current.OnLoseGame += ShowLoseScreen;
+
+        endGameScreen.blocksRaycasts = false;
     }
 
     private void OnDestroy()
     {
+        // Unsubscribe to EventController Events
         EventsController.current.OnUpdateRemainingZombies -= UpdateRemainingZombiesText;
         EventsController.current.OnWinGame -= ShowWinScreen;
         EventsController.current.OnLoseGame -= ShowLoseScreen;
@@ -27,8 +31,7 @@ public class GameView : MonoBehaviour
 
     public void ResetGame()
     {
-        endGameScreen.alpha = 0f;
-        EventsController.current.ResetGame();
+        StartCoroutine(FadeOut());
     }
 
     private void UpdateRemainingZombiesText(int remainingZombies)
@@ -38,15 +41,63 @@ public class GameView : MonoBehaviour
 
     private void ShowWinScreen()
     {
-        winText.SetActive(true);
-        loseText.SetActive(false);
-        endGameScreen.alpha = 1f;
+        StartCoroutine(FadeInWinScreen());
     }
     
     private void ShowLoseScreen()
     {
+        StartCoroutine(FadeInLoseScreen());
+    }
+
+    private IEnumerator FadeOut()
+    {
+        float elapsedTime = 0f;
+        
+        endGameScreen.blocksRaycasts = false;
+        EventsController.current.ResetGame();
+        
+        while (elapsedTime < 2f)
+        {
+            elapsedTime += Time.deltaTime;
+            float currentAlpha = Mathf.LerpUnclamped(1f, 0f, elapsedTime / 2f);
+            endGameScreen.alpha = currentAlpha * 1;
+            yield return null;
+        }
+    }
+    
+    private IEnumerator FadeInWinScreen()
+    {
+        float elapsedTime = 0f;
+        
+        endGameScreen.blocksRaycasts = true;
+
+        winText.SetActive(true);
+        loseText.SetActive(false);
+
+        while (elapsedTime < 2f)
+        {
+            elapsedTime += Time.deltaTime;
+            float currentAlpha = Mathf.LerpUnclamped(0f, 1f, elapsedTime / 2f);
+            endGameScreen.alpha = currentAlpha * 1;
+            yield return null;
+        }
+    }
+    
+    private IEnumerator FadeInLoseScreen()
+    {
+        float elapsedTime = 0f;
+        endGameScreen.blocksRaycasts = true;
+
         winText.SetActive(false);
         loseText.SetActive(true);
-        endGameScreen.alpha = 1f;
+
+        while (elapsedTime < 2f)
+        {
+            elapsedTime += Time.deltaTime;
+            float currentAlpha = Mathf.LerpUnclamped(0f, 1f, elapsedTime / 2f);
+            endGameScreen.alpha = currentAlpha * 1;
+            yield return null;
+        }
     }
+
 }

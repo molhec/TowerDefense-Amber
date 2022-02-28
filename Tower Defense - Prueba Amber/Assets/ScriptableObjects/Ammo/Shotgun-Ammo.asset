@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Shotgun-Ammo
   m_EditorClassIdentifier: 
   name: Shotgun Ammo
-  headshotDamage: 2
-  bodyDamage: 1
+  headshotDamage: 7
+  bodyDamage: 5
   damageDistanceMultiplier: 0.3

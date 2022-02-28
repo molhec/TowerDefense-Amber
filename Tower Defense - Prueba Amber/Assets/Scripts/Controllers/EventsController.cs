@@ -11,6 +11,8 @@ public class EventsController : MonoBehaviour
     {
         current = this;
     }
+    
+    // Methods and Actions that objects will access to comunicate to each other
 
     public event Action<Vector3, Color> OnDrawWeaponTrajectory;
     public void DrawWeaponTrajectory(Vector3 worldPosMouse, Color trajectoryColor) => OnDrawWeaponTrajectory?.Invoke(worldPosMouse, trajectoryColor);
@@ -22,8 +24,8 @@ public class EventsController : MonoBehaviour
     public void EnemyKilled() => OnEnemyKilled?.Invoke();
     
     public event Action OnEnemyArrivedToTower;
-    public void EnemyArrivedToTower() => OnEnemyArrivedToTower?.Invoke();
-    
+    public void EnemyArriveToTower() => OnEnemyArrivedToTower?.Invoke();
+
     public event Action<int> OnUpdateRemainingZombies;
     public void UpdateRemainingZombies(int remainingZombies) => OnUpdateRemainingZombies?.Invoke(remainingZombies);
     
@@ -34,5 +36,6 @@ public class EventsController : MonoBehaviour
     public void LoseGame() => OnLoseGame?.Invoke();
     
     public event Action OnResetGame;
+
     public void ResetGame() => OnResetGame?.Invoke();
 }

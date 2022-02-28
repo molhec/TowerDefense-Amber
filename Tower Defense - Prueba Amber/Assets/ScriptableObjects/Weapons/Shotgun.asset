@@ -14,6 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Shotgun
   bulletToUse: {fileID: 11400000, guid: e0843da95a2894c48a017f75df9dfe8e, type: 2}
-  maxBullets: 6
   fireRate: 1
-  recoveryTime: 0
+  maxDistanceToRegisterDamage: 5

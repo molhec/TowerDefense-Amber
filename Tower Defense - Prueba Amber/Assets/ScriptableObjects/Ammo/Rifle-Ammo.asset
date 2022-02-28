@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Rifle-Ammo
   m_EditorClassIdentifier: 
   name: Rifle Ammo
-  headshotDamage: 2
-  bodyDamage: 1
+  headshotDamage: 3
+  bodyDamage: 2
   damageDistanceMultiplier: 3

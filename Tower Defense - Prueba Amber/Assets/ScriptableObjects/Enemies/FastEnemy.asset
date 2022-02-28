@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Fast Enemy
   speed: 1
-  health: 10
+  health: 15

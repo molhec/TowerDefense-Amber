@@ -22,6 +22,7 @@ public class WeaponController : MonoBehaviour
 
     private void Update()
     {
+        // Calculate how often a weapon can be shot
         if (Input.GetAxis("Fire1") > 0 && Time.time >= nextTimetoFire)
         {
             nextTimetoFire = Time.time + 1 / model.fireRate;
@@ -31,17 +32,22 @@ public class WeaponController : MonoBehaviour
 
     void FixedUpdate()
     {
+        // Calculate the beginning and end of the line renderer, the end gets also used to determine if we hit an Enemy
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         if(Physics.Raycast(ray, out var hitData, 1000))
         {
-            worldPositionMouse = hitData.point;
             hitObject = hitData.collider;
-            CalculateTrajectory(worldPositionMouse);
+            if(!hitObject.CompareTag("Player"))
+            {
+                worldPositionMouse = hitData.point;
+                CalculateTrajectory(worldPositionMouse);
+            }
         }
     }
 
     private void CalculateTrajectory(Vector3 worldPosMouse)
     {
+        // Comunicate to WeaponViewer to Draw the Trajectory
         EventsController.current.DrawWeaponTrajectory(worldPosMouse, trajectoryColor);
     }
 
@@ -49,9 +55,15 @@ public class WeaponController : MonoBehaviour
     {
         if (!ReferenceEquals(hitObject, null))
         {
-            GameObject hit = Instantiate(hitEffectPrefab, worldPositionMouse, Quaternion.identity, transform);
-            Destroy(hit, 2f);
-            EventsController.current.ReceiveDamage(hitObject, model.bulletToUse);
+            float distance = Vector3.Distance(transform.position, worldPositionMouse);
+            if (distance <= model.maxDistanceToRegisterDamage)
+            {
+                // Spawn the hit particle system
+                GameObject hit = Instantiate(hitEffectPrefab, worldPositionMouse, Quaternion.identity, transform);
+                Destroy(hit, 2f);
+                // Comunicate to the hit Enemy and inflict damage
+                EventsController.current.ReceiveDamage(hitObject, model.bulletToUse);
+            }
         }
     }
 }
