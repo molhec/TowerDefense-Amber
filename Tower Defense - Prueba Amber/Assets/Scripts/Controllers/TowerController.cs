@@ -5,10 +5,11 @@ using UnityEngine;
 
 public class TowerController : MonoBehaviour
 {
+    /// <summary>
+    /// Array of Weapons to choose. Assigned on the edit in this order: 0-Pistol, 1-Rifle, 2-Shotgun
+    /// </summary>
     [Header("Weapons")]
-    [SerializeField] private WeaponController pistol;
-    [SerializeField] private WeaponController rifle;
-    [SerializeField] private WeaponController shotgun;
+    [SerializeField] private WeaponController[] weapons;
 
     [SerializeField] private int towerHealth = 3;
 
@@ -20,11 +21,9 @@ public class TowerController : MonoBehaviour
         // Subscribe to EventController Events
         EventsController.current.OnResetGame += ResetTower;
         
-        // Initialize to default values
-
         currentTowerHealth = towerHealth;
         
-        ChangeWeaponToRifle();
+        SelectNewWeapon(1);
     }
 
     private void OnDestroy()
@@ -40,35 +39,17 @@ public class TowerController : MonoBehaviour
     }
     
     /// <summary>
-    /// Enables the pistol weapon and disable the other ones, invoked from Button UI Unity Event
+    /// Select a new weapon based on index
     /// </summary>
-    public void ChangeWeaponToPistol()
+    /// <param name="indexWeaponToChoose">must be based on the order that are assigned on the weapons array</param>
+    public void SelectNewWeapon(int indexWeaponToChoose)
     {
-        pistol.gameObject.SetActive(true);
-        rifle.gameObject.SetActive(false);
-        shotgun.gameObject.SetActive(false);
+        foreach (var weapon in weapons)
+            weapon.gameObject.SetActive(false);
+        
+        weapons[indexWeaponToChoose].gameObject.SetActive(true);
     }
     
-    /// <summary>
-    /// Enables the rifle weapon and disable the other ones, invoked from Button UI Unity Event
-    /// </summary>
-    public void ChangeWeaponToRifle()
-    {
-        pistol.gameObject.SetActive(false);
-        rifle.gameObject.SetActive(true);
-        shotgun.gameObject.SetActive(false);
-    }
-    
-    /// <summary>
-    /// Enables the shotgun weapon and disable the other ones, invoked from Button UI Unity Event
-    /// </summary>
-    public void ChangeWeaponToShotgun()
-    {
-        pistol.gameObject.SetActive(false);
-        rifle.gameObject.SetActive(false);
-        shotgun.gameObject.SetActive(true);
-    }
-
     private void ReceiveDamage(Collider enemyCollider)
     {
         currentTowerHealth--;

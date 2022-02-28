@@ -36,6 +36,8 @@ public class WeaponController : MonoBehaviour
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         if(Physics.Raycast(ray, out var hitData, 1000))
         {
+            float distance = Vector3.Distance(transform.position, hitData.point);
+            if(distance > model.maxDistanceToRegisterDamage) return;
             hitObject = hitData.collider;
             if(!hitObject.CompareTag("Player"))
             {
